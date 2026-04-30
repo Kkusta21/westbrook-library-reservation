@@ -1,0 +1,1 @@
+﻿-- Seed data: inserts predefined roles (Administrator, Staff) and the three library locations

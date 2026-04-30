@@ -1,0 +1,1 @@
+﻿-- Initial schema: creates tables for users, roles, locations, resources, reservations, and audit_log
