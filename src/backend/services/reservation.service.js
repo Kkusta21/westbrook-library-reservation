@@ -1,5 +1,6 @@
 ﻿const Reservation = require('../models/Reservation');
 const Resource = require('../models/Resource');
+const db = require('../db/connection');
 
 class ReservationService {
   static async getAllReservations() {
@@ -15,8 +16,12 @@ class ReservationService {
   }
 
   static async createReservation(data) {
-    const resource = await Resource.findById(data.resource_id);
-    if (!resource) {
+    // Validate resource exists
+    const resourceResult = await db.query(
+      'SELECT * FROM resources WHERE id = $1',
+      [data.resource_id]
+    );
+    if (!resourceResult || !resourceResult.rows || !resourceResult.rows[0]) {
       throw { statusCode: 400, message: 'Invalid resource' };
     }
 
@@ -25,9 +30,34 @@ class ReservationService {
       throw { statusCode: 400, message: 'End time must be after start time' };
     }
 
-    // TODO: Add conflict detection logic
+    // Conflict detection
+    const conflictResult = await db.query(
+      `SELECT * FROM reservations
+       WHERE resource_id = $1
+       AND status != 'cancelled'
+       AND start_time < $3
+       AND end_time > $2`,
+      [data.resource_id, data.start_time, data.end_time]
+    );
+    if (conflictResult.rows && conflictResult.rows.length > 0) {
+      throw { statusCode: 409, message: 'Time slot already booked' };
+    }
 
-    return await Reservation.create(data);
+    // Insert reservation
+    const result = await db.query(
+      `INSERT INTO reservations
+       (resource_id, patron_name, start_time, end_time, status, confirmation_reference)
+       VALUES ($1, $2, $3, $4, 'active', $5)
+       RETURNING *`,
+      [
+        data.resource_id,
+        data.patron_name,
+        data.start_time,
+        data.end_time,
+        'WL-' + Date.now()
+      ]
+    );
+    return result.rows[0];
   }
 
   static async updateReservation(id, data) {
@@ -46,6 +76,28 @@ class ReservationService {
     }
 
     return await Reservation.delete(id);
+  }
+
+  static async cancelReservation(id) {
+    const existing = await db.query(
+      'SELECT * FROM reservations WHERE id = $1',
+      [id]
+    );
+
+    if (!existing || !existing.rows || !existing.rows[0]) {
+      throw { statusCode: 404, message: 'Not found' };
+    }
+
+    if (existing.rows[0].status === 'cancelled') {
+      throw { statusCode: 400, message: 'Already cancelled' };
+    }
+
+    const result = await db.query(
+      'UPDATE reservations SET status = $1 WHERE id = $2 RETURNING *',
+      ['cancelled', id]
+    );
+
+    return result.rows[0];
   }
 }
 
