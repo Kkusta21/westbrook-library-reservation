@@ -43,7 +43,7 @@ westbrook-library-reservation/
 | Document | Description | Status |
 |---|---|---|
 | Functional Analysis v1.0 | Functional and non-functional requirements, use cases, stakeholders | ✅ Complete |
-| User Stories v1.0 | User stories with acceptance criteria | ⏳ Pending |
+| User Stories v1.0 | User stories with acceptance criteria | ✅ Complete |
 | Technical Design v1.0 | Architecture and technology proposal | ⏳ Pending |
 | Test Plan v1.0 | Test strategy, test cases and unit tests | ⏳ Pending |
 
