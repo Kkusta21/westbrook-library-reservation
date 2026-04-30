@@ -1,0 +1,272 @@
+# Prompts — Technical Design and Technology Proposal
+## Tool: aXet.oasis | Persona: Architect | Answer Type: Detailed
+
+---
+
+## ⚙️ Context Parameters Configuration
+
+### GLOBAL
+```
+We are working on a software development project for Westbrook Community Library,
+a public library serving 45,000 residents across 1 central building and 2 branch
+locations, managed by 12 staff members with a limited municipal budget.
+
+The system to be designed is a centralized Reservation Management System to replace
+the current manual process of paper logbooks, phone calls and informal emails.
+
+The system must manage reservations for study rooms, meeting halls, projectors,
+laptops and shared equipment across all three locations.
+```
+
+### REQUIREMENTS
+```
+- Usable by non-technical staff with basic computer literacy.
+- Accessible from existing computers at each branch via a standard web browser.
+- No proprietary client software installation required.
+- Very limited municipal budget.
+- Must support at least 3 simultaneous locations.
+- Must handle rooms and shared equipment as reservable resources.
+- Role-based access: Administrator, Staff User, Patron.
+- Must be available during all library operating hours (99% uptime).
+- Must prevent double-bookings automatically.
+- Must support reporting and audit trail.
+- No prolonged downtime or complex data migration.
+```
+
+### CURRENT CONTEXT
+```
+The Functional Analysis (v1.0) and User Stories (v1.0) have been completed.
+We are now in the Technical Design and Technology Proposal phase of the SDLC.
+The deliverable is a complete Technical Design document including architecture
+proposal, technology stack, data model, and deployment considerations.
+Language: English.
+```
+
+### RULES
+```
+- Justify every technology choice against the project constraints
+  (budget, usability, browser-based, limited infrastructure).
+- Prefer open-source or low-cost solutions given the budget constraint.
+- Keep the architecture simple and appropriate for a small-to-medium project.
+- Do not over-engineer the solution.
+- All components must be named and their responsibilities clearly described.
+- The data model must cover all functional requirements.
+- Do not generate code at this stage.
+```
+
+---
+
+## 📂 Files to open in aXet.oasis File Explorer
+
+- `FunctionalAnalysis_v1.0.md`
+- `UserStories_v1.0.md`
+
+---
+
+## 💬 Prompt 1 — Architecture overview
+
+```
+Based on the Functional Analysis and User Stories in the open documents,
+propose a high-level architecture for the Westbrook Community Library
+Reservation Management System.
+
+Include:
+- Architecture style chosen (e.g. monolithic, layered, microservices)
+  and justification for why it suits this project
+- Main system components and their responsibilities
+- How the three library locations will interact with the system
+- High-level data flow between components
+
+Do not propose specific technologies yet.
+```
+
+---
+
+## 💬 Prompt 2 — Technology stack proposal
+
+```
+Based on the architecture proposed and the project constraints
+(browser-based, limited budget, non-technical staff, existing hardware),
+propose a full technology stack for the system.
+
+For each technology choice provide:
+- Layer (Frontend / Backend / Database / Infrastructure)
+- Technology name
+- Version or edition recommended
+- Justification (why this technology fits the constraints)
+- Licence type (open-source / free / commercial)
+- Alternatives considered and why they were discarded
+
+Cover at minimum: frontend framework, backend language/framework,
+database, authentication mechanism, hosting/deployment approach,
+and reporting/export capability.
+```
+
+---
+
+## 💬 Prompt 3 — Component design
+
+```
+Describe each system component in detail.
+
+For each component provide:
+- Component name
+- Layer it belongs to
+- Responsibility (what it does)
+- Interfaces (what it exposes or consumes)
+- Dependencies on other components
+
+Components to cover as a minimum:
+- User Interface (web frontend)
+- Authentication module
+- Reservation management module
+- Resource management module
+- Notification module
+- Reporting module
+- Administration module
+- Database layer
+```
+
+---
+
+## 💬 Prompt 4 — Data model
+
+```
+Design the data model for the system.
+
+For each entity provide:
+- Entity name
+- Attributes (name, data type, constraints)
+- Primary key
+- Foreign keys and relationships to other entities
+
+Entities to cover as a minimum:
+- User
+- Role
+- Location
+- Resource
+- ResourceType
+- TimeSlot
+- Reservation
+- ReservationStatus
+- Notification
+- AuditLog
+- ReservationRule
+
+Present the relationships between entities clearly,
+indicating cardinality (one-to-one, one-to-many, many-to-many).
+```
+
+---
+
+## 💬 Prompt 5 — Security design
+
+```
+Describe the security design of the system covering:
+
+- Authentication mechanism (how users prove their identity)
+- Session management (how authenticated sessions are maintained and expired)
+- Authorization model (how role-based access is enforced at the component level)
+- Data protection measures (patron personal data)
+- Input validation and protection against common web vulnerabilities
+- Audit logging strategy
+
+Map each security measure to the relevant non-functional requirements
+(NFR-008 through NFR-011).
+```
+
+---
+
+## 💬 Prompt 6 — Deployment and infrastructure
+
+```
+Describe the deployment architecture for the system considering:
+
+- Hosting approach (on-premise vs cloud vs hybrid) with justification
+  based on the budget and infrastructure constraints
+- Environment strategy (development, testing, production)
+- Backup and recovery approach
+- How the system will be accessed from the three library locations
+- Estimated infrastructure requirements (server specs, storage)
+- Approach to go-live with no prolonged downtime
+
+Map recommendations to NFR-006, NFR-007, NFR-022 and NFR-023.
+```
+
+---
+
+## 💬 Prompt 7 — Traceability to requirements
+
+```
+Generate a traceability matrix that maps each Functional Requirement (FR-001
+to FR-031) to the component(s) of the architecture that implement it.
+
+Format as a table:
+
+| FR ID | FR Title | Component(s) | Notes |
+|---|---|---|---|
+
+Flag any FR that has no corresponding component as "NOT COVERED".
+```
+
+---
+
+## 💬 Prompt 8 — Technical risks
+
+```
+Identify the main technical risks for this project and for each one provide:
+
+- Risk ID (TR-001, TR-002...)
+- Risk description
+- Likelihood (High / Medium / Low)
+- Impact (High / Medium / Low)
+- Mitigation strategy
+
+Consider risks related to: budget, staff adoption, data integrity,
+security, infrastructure, and third-party dependencies.
+```
+
+---
+
+## 💬 Prompt 9 — Final review
+
+```
+Review the complete Technical Design document generated in this session.
+Check that:
+
+- Every architectural decision is justified against project constraints
+- The data model covers all entities needed by the functional requirements
+- The security design addresses all security non-functional requirements
+- The deployment approach respects the budget and downtime constraints
+- There are no contradictions between sections
+- The technology choices are coherent and work together as a stack
+
+List any gaps or inconsistencies and correct them.
+```
+
+---
+
+## 💾 Prompt 10 — Export (Autonomous Chat)
+
+```
+Save the complete Technical Design and Technology Proposal document
+as "TechnicalDesign_v1.0.md" using Markdown formatting:
+- Use # for main headings
+- Use ## for section headings
+- Use tables for technology stack, data model, traceability matrix and risk register
+- Use bullet points for component descriptions
+- Include a document control table at the top (version 1.0, date, status: Draft)
+Save it to the current workspace folder.
+```
+
+---
+
+## ✅ Actual Session Notes
+
+- Date: [fill in]
+- Tool: aXet.oasis
+- Persona: Architect
+- Answer Type: Detailed
+- Model used: [fill in which GPT model aXet used]
+- Number of prompts sent: [fill in]
+- Observations: [anything that worked well or needed adjustment]
