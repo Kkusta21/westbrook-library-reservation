@@ -8,8 +8,8 @@
 ### GLOBAL
 ```
 We are working on a software development project for Westbrook Community Library,
-a public library serving 45,000 residents across 1 central building and 2 branch locations,
-managed by 12 staff members with a limited municipal budget.
+a public library serving 45,000 residents across 1 central building and 2 branch
+locations, managed by 12 staff members with a limited municipal budget.
 
 The library currently manages all room and equipment reservations (study rooms, meeting halls,
 projectors, laptops, shared resources) manually through paper logbooks, phone calls and informal
@@ -32,6 +32,16 @@ freeing staff time, and providing a better experience for both patrons and emplo
 - Must handle rooms and shared equipment as reservable resources.
 ```
 
+### ARCHITECTURE
+```
+Leave blank — not yet defined.
+```
+
+### TECHNOLOGIES
+```
+Leave blank — not yet defined.
+```
+
 ### CURRENT CONTEXT
 ```
 We are in the Functional Analysis and Requirements phase of the SDLC.
@@ -49,6 +59,12 @@ Language: English.
 - All requirements must be numbered and traceable.
 - Distinguish clearly between functional and non-functional requirements.
 ```
+
+---
+
+## 📂 Files to open in aXet.oasis File Explorer
+
+- None required at this stage — the project scenario is provided in the parameters above.
 
 ---
 
@@ -194,3 +210,15 @@ as "FunctionalAnalysis_v1.0.md" using Markdown formatting:
 - Use numbered lists for use case steps
 Save it to the current workspace folder.
 ```
+
+---
+
+## ✅ Actual Session Notes
+
+- Date: 30 April 2026
+- Tool: aXet.oasis
+- Persona: Business Analyst
+- Answer Type: Detailed
+- Model used: [fill in which GPT model aXet used]
+- Number of prompts sent: [fill in]
+- Observations: [anything that worked well or needed adjustment]
