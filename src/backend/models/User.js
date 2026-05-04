@@ -23,7 +23,11 @@ class User {
 
   static async findByEmail(email) {
     const { rows } = await pool.query(
-      `SELECT * FROM users WHERE email = $1`,
+      `SELECT u.id, u.name, u.email, u.password_hash, u.role_id, 
+              r.name AS role, u.is_active, u.created_at
+       FROM users u
+       JOIN roles r ON u.role_id = r.id
+       WHERE u.email = $1`,
       [email]
     );
     return rows[0];
@@ -41,11 +45,7 @@ class User {
 
   static async update(id, { name, email, role_id, is_active }) {
     const { rows } = await pool.query(
-      `UPDATE users
-       SET name = $1,
-           email = $2,
-           role_id = $3,
-           is_active = $4
+      `UPDATE users SET name = $1, email = $2, role_id = $3, is_active = $4
        WHERE id = $5
        RETURNING id, name, email, role_id, is_active`,
       [name, email, role_id, is_active, id]

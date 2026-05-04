@@ -25,7 +25,7 @@ class AuthService {
       {
         id: user.id,
         email: user.email,
-        role: user.role || user.role_id,
+        role: user.role,
       },
       jwtConfig.secret,
       {
@@ -40,7 +40,7 @@ class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role || user.role_id,
+        role: user.role,
       },
     };
   }

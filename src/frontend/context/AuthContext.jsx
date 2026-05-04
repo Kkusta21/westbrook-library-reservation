@@ -7,7 +7,6 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  // Restore session on mount
   useEffect(() => {
     const storedToken = localStorage.getItem("wl_token");
     const storedUser = localStorage.getItem("wl_user");
@@ -26,10 +25,9 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const data = await loginService(email, password);
-
-    // Expecting backend to return { token, user }
-    const { token, user } = data;
+    const response = await loginService(email, password);
+    const token = response.token || response.data?.token;
+    const user = response.user || response.data?.user;
 
     localStorage.setItem("wl_token", token);
     localStorage.setItem("wl_user", JSON.stringify(user));
@@ -41,10 +39,8 @@ const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("wl_token");
     localStorage.removeItem("wl_user");
-
     setToken(null);
     setUser(null);
-
     window.location.href = "/login";
   };
 

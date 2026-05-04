@@ -34,11 +34,12 @@ function requireAuth(req, res, next) {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     // Attach only what downstream handlers need – never the raw payload
     req.user = {
-      id:       payload.sub,   // subject = user id (number)
-      email:    payload.email,
-      name:     payload.name,
-      roleId:   payload.roleId,
-      roleName: payload.roleName,
+  id:       payload.id || payload.sub,
+  email:    payload.email,
+  name:     payload.name,
+  roleId:   payload.roleId,
+  roleName: payload.roleName || payload.role,
+
     };
     return next();
   } catch (err) {
@@ -82,7 +83,7 @@ function requireRole(...roles) {
       });
     }
 
-    if (!roles.includes(req.user.roleName)) {
+    if (!roles.includes(req.user.roleName) && !roles.includes(req.user.role))  {
       return res.status(403).json({
         status: 'error',
         message: `Access denied. Required role: ${roles.join(' or ')}.`,

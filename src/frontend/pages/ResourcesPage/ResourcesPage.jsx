@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import PageWrapper from "../../components/layout/PageWrapper/PageWrapper";
 import useResources from "../../hooks/useResources";
 import Table from "../../components/common/Table/Table";
@@ -8,104 +8,48 @@ import Modal from "../../components/common/Modal/Modal";
 import ResourceForm from "../../components/resources/ResourceForm/ResourceForm";
 
 const ResourcesPage = () => {
-  const {
-    resources,
-    loading,
-    error,
-    createResource,
-    updateResource,
-    deleteResource,
-  } = useResources();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedResource, setSelectedResource] = useState(null);
-
-  const handleCreate = async (data) => {
-    await createResource(data);
-    setIsModalOpen(false);
-  };
-
-  const handleUpdate = async (data) => {
-    await updateResource(selectedResource.id, data);
-    setIsModalOpen(false);
-    setSelectedResource(null);
-  };
-
-  const handleDeactivate = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to deactivate this resource?"
-    );
-    if (!confirmed) return;
-
-    await deleteResource(id);
-  };
-
-  const openEditModal = (resource) => {
-    setSelectedResource(resource);
-    setIsModalOpen(true);
-  };
+  const { resources, loading, error, createResource, updateResource, deleteResource } = useResources();
+  const [showModal, setShowModal] = useState(false);
+  const [editData, setEditData] = useState(null);
 
   const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Type", accessor: "resource_type_id" },
-    { header: "Location", accessor: "location_name" },
-    { header: "Capacity", accessor: "capacity" },
-    {
-      header: "Status",
-      accessor: "status",
-      render: (row) => <Badge label={row.status || "Active"} />,
-    },
-    {
-      header: "Actions",
-      accessor: "actions",
-      render: (row) => (
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <Button
-            label="Edit"
-            variant="primary"
-            type="button"
-            onClick={() => openEditModal(row)}
-          />
-          <Button
-            label="Deactivate"
-            variant="danger"
-            type="button"
-            onClick={() => handleDeactivate(row.id)}
-          />
-        </div>
-      ),
-    },
+    { key: "name", label: "Name" },
+    { key: "type", label: "Type" },
+    { key: "location", label: "Location" },
+    { key: "capacity", label: "Capacity" },
+    { key: "status", label: "Status" },
   ];
+
+  const handleSubmit = async (data) => {
+    if (editData) {
+      await updateResource(editData.id, data);
+    } else {
+      await createResource(data);
+    }
+    setShowModal(false);
+    setEditData(null);
+  };
 
   return (
     <PageWrapper title="Resources">
-      <div style={{ marginBottom: "1.5rem" }}>
-        <Button
-          label="New Resource"
-          variant="primary"
-          onClick={() => {
-            setSelectedResource(null);
-            setIsModalOpen(true);
-          }}
-        />
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+        <Button label="+ New Resource" variant="primary" onClick={() => { setEditData(null); setShowModal(true); }} />
       </div>
-
-      {loading && <p>Loading resources...</p>}
+      {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {!loading && !error && (
-        <Table data={resources} columns={columns} />
-      )}
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ResourceForm
-          initialData={selectedResource || {}}
-          onSubmit={selectedResource ? handleUpdate : handleCreate}
-          onCancel={() => {
-            setIsModalOpen(false);
-            setSelectedResource(null);
-          }}
-        />
+      <Table
+        data={resources}
+        columns={columns}
+        actions={(row) => (
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <Badge status={row.status || "active"} />
+            <Button label="Edit" variant="ghost" onClick={() => { setEditData(row); setShowModal(true); }} />
+            <Button label="Deactivate" variant="danger" onClick={() => deleteResource(row.id)} />
+          </div>
+        )}
+      />
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={editData ? "Edit Resource" : "New Resource"}>
+        <ResourceForm initialData={editData} onSubmit={handleSubmit} onCancel={() => setShowModal(false)} />
       </Modal>
     </PageWrapper>
   );

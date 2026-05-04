@@ -1,4 +1,3 @@
-﻿// Defines Express routes under /api/v1/reservations and maps them to reservation.controller handlers
 const express = require('express');
 const router = express.Router();
 const ReservationController = require('../controllers/reservation.controller');

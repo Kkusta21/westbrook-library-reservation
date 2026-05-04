@@ -1,90 +1,62 @@
-﻿import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageWrapper from "../../components/layout/PageWrapper/PageWrapper";
 import useReservations from "../../hooks/useReservations";
 import Table from "../../components/common/Table/Table";
 import Badge from "../../components/common/Badge/Badge";
 import Button from "../../components/common/Button/Button";
-import Input from "../../components/common/Input/Input";
 import Modal from "../../components/common/Modal/Modal";
 import ReservationForm from "../../components/reservations/ReservationForm/ReservationForm";
 
 const ReservationsPage = () => {
-  const navigate = useNavigate();
-  const {
-    reservations,
-    loading,
-    error,
-    createReservation,
-  } = useReservations();
-
+  const { reservations, loading, error, createReservation } = useReservations();
   const [search, setSearch] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
-  const filteredReservations = useMemo(() => {
-    return reservations.filter((r) =>
-      r.patron_name?.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [reservations, search]);
-
-  const handleCreate = async (data) => {
-    await createReservation(data);
-    setIsModalOpen(false);
-  };
+  const filtered = reservations.filter((r) =>
+    r.patron_name?.toLowerCase().includes(search.toLowerCase())
+  );
 
   const columns = [
-    { header: "ID", accessor: "id" },
-    { header: "Patron Name", accessor: "patron_name" },
-    { header: "Resource", accessor: "resource_name" },
-    { header: "Date", accessor: "reservation_date" },
-    { header: "Start", accessor: "start_time" },
-    { header: "End", accessor: "end_time" },
-    {
-      header: "Status",
-      accessor: "status",
-      render: (row) => <Badge label={row.status} />,
-    },
+    { key: "id", label: "ID" },
+    { key: "patron_name", label: "Patron Name" },
+    { key: "resource_name", label: "Resource" },
+    { key: "reservation_date", label: "Date" },
+    { key: "start_time", label: "Start" },
+    { key: "end_time", label: "End" },
+    { key: "status", label: "Status" },
   ];
+
+  const handleSubmit = async (data) => {
+    await createReservation(data);
+    setShowModal(false);
+  };
 
   return (
     <PageWrapper title="Reservations">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "1.5rem",
-          gap: "1rem",
-        }}
-      >
-        <Input
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        <input
           placeholder="Search by patron name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          style={{ padding: "0.5rem 0.75rem", border: "1px solid #d1d5db", borderRadius: "4px", width: "300px" }}
         />
-
-        <Button
-          label="New Reservation"
-          variant="primary"
-          onClick={() => setIsModalOpen(true)}
-        />
+        <Button label="+ New Reservation" variant="primary" onClick={() => setShowModal(true)} />
       </div>
 
-      {loading && <p>Loading reservations...</p>}
+      {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {!loading && !error && (
-        <Table
-          data={filteredReservations}
-          columns={columns}
-          onRowClick={(row) => navigate(`/reservations/${row.id}`)}
-        />
-      )}
+      <Table
+        data={filtered}
+        columns={columns}
+        onRowClick={(row) => navigate(`/reservations/${row.id}`)}
+        actions={(row) => <Badge status={row.status} />}
+      />
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ReservationForm
-          onSubmit={handleCreate}
-          onCancel={() => setIsModalOpen(false)}
-        />
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="New Reservation">
+        <ReservationForm onSubmit={handleSubmit} onCancel={() => setShowModal(false)} />
       </Modal>
     </PageWrapper>
   );

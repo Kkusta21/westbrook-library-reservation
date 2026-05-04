@@ -1,4 +1,4 @@
-﻿import api from "./api";
+import api from "./api";
 
 export const getAll = async () => {
   const response = await api.get("/api/resources");
@@ -20,7 +20,7 @@ export const update = async (id, data) => {
   return response.data;
 };
 
-export const remove = async (id) => {
+export const deleteResource = async (id) => {
   const response = await api.delete(`/api/resources/${id}`);
   return response.data;
 };

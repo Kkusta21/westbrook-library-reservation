@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import api from "../services/api";
 
 const useAvailability = () => {
@@ -9,32 +9,18 @@ const useAvailability = () => {
   const checkAvailability = async (locationId, startTime, endTime) => {
     try {
       setLoading(true);
-      setError(null);
-
       const response = await api.get("/api/availability", {
-        params: {
-          locationId,
-          startTime,
-          endTime,
-        },
+        params: { location_id: locationId, start_time: startTime, end_time: endTime },
       });
-
-      setResults(response.data);
-      return response.data;
+      setResults(response.data?.data || response.data || []);
     } catch (err) {
-      setError(err.message || "Failed to check availability");
-      throw err;
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  return {
-    results,
-    loading,
-    error,
-    checkAvailability,
-  };
+  return { results, loading, error, checkAvailability };
 };
 
 export default useAvailability;

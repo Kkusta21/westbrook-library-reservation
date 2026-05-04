@@ -1,9 +1,5 @@
-﻿import { useState } from "react";
-import {
-  getByPeriod,
-  getByResource,
-  getByLocation,
-} from "../services/report.service";
+import { useState } from "react";
+import { getByPeriod, getByResource, getByLocation } from "../services/report.service";
 
 const useReports = () => {
   const [data, setData] = useState({});
@@ -11,58 +7,33 @@ const useReports = () => {
   const [error, setError] = useState(null);
 
   const fetchByPeriod = async (start, end) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-      const result = await getByPeriod(start, end);
-      setData(result);
-      return result;
-    } catch (err) {
-      setError(err.message || "Failed to fetch period report");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+      const res = await getByPeriod(start, end);
+      setData((d) => ({ ...d, period: res?.data || res || [] }));
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
   };
 
   const fetchByResource = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-      const result = await getByResource();
-      setData(result);
-      return result;
-    } catch (err) {
-      setError(err.message || "Failed to fetch resource report");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+      const res = await getByResource();
+      setData((d) => ({ ...d, resource: res?.data || res || [] }));
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
   };
 
   const fetchByLocation = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-      const result = await getByLocation();
-      setData(result);
-      return result;
-    } catch (err) {
-      setError(err.message || "Failed to fetch location report");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+      const res = await getByLocation();
+      setData((d) => ({ ...d, location: res?.data || res || [] }));
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
   };
 
-  return {
-    data,
-    loading,
-    error,
-    fetchByPeriod,
-    fetchByResource,
-    fetchByLocation,
-  };
+  return { data, loading, error, fetchByPeriod, fetchByResource, fetchByLocation };
 };
 
 export default useReports;
