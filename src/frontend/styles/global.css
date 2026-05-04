@@ -1,1 +1,155 @@
-﻿/* Global CSS reset and base styles applied across the entire application */
+﻿/* Import design tokens */
+@import './variables.css';
+
+/* ================================
+   CSS RESET
+================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ================================
+   BASE STYLES
+================================= */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+/* Paragraph */
+p {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+/* Links */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+  margin-bottom: 1rem;
+  padding-left: 0;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Form elements */
+input,
+select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+input:focus,
+select:focus {
+  border-color: var(--primary);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* ================================
+   LAYOUT UTILITIES
+================================= */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}

@@ -51,15 +51,12 @@ app.get('/health', (_req, res) => {
 // =============================================================================
 // API Routes
 // =============================================================================
-app.use('/api/auth', require('./routes/authRoutes'));
-
-app.use('/api/users', require('./routes/userRoutes'));
-
-app.use('/api/resources', require('./routes/resourceRoutes'));
-
-app.use('/api/reports', require('./routes/reportRoutes'));
-
-app.use('/api/reservations', require('./routes/reservationRoutes'));
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/resources', require('./routes/resource.routes'));
+app.use('/api/reports', require('./routes/report.routes'));
+app.use('/api/reservations', require('./routes/reservation.routes'));
+app.use('/api/availability', require('./routes/availability.routes'));
 
 // Placeholders – to be wired in subsequent iterations
 // app.use('/api/locations', require('./routes/locationRoutes'));
